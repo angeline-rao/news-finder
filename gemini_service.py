@@ -39,6 +39,14 @@ class GeminiContentService:
         simple_metadata_pattern = r'\[(?:Search|Result|Source|Reference)\s*\d+\]'
         cleaned_text = re.sub(simple_metadata_pattern, '', cleaned_text)
         
+        # Pattern to match citation patterns like [1, 2, 4, 5] or [1] or [1, 2] etc.
+        citation_pattern = r'\[\s*\d+(?:\s*,\s*\d+)*\s*\]'
+        cleaned_text = re.sub(citation_pattern, '', cleaned_text)
+        
+        # Pattern to match other citation formats like [General 1, Meta 2] 
+        complex_citation_pattern = r'\[(?:\w+\s+\d+(?:\s*,\s*\w+\s+\d+)*)\]'
+        cleaned_text = re.sub(complex_citation_pattern, '', cleaned_text)
+        
         # Clean up extra whitespace that might be left behind
         cleaned_text = re.sub(r'\s+', ' ', cleaned_text).strip()
         
@@ -377,7 +385,6 @@ class GeminiContentService:
         print(f"Gemini service starting streaming recommendations")
         # Build prompt and call streaming API  
         prompt = self._build_prompt("", True, memory_context)
-        print(f"Prompt for streaming recommendations: {prompt}")
         
         # Stream responses
         for chunk in self._call_gemini_api_for_results_streaming("gemini-2.5-pro", prompt):
@@ -402,10 +409,6 @@ class GeminiContentService:
             response = self._call_gemini_api_for_url("gemini-2.5-pro", prompt)
             results_data = response.text
             grounding_metadata = response.candidates[0].grounding_metadata
-            
-            print(f"Gemini URL Response for {title} and {source}: {results_data}")
-            print(f"Gemini URL Grounding chunks for {title} and {source}: {grounding_metadata.grounding_chunks}")
-            print(f"Gemini URL Grounding supports for {title} and {source}: {grounding_metadata.grounding_supports}")
             
             if not grounding_metadata.grounding_chunks:
                 print(f"No grounding chunks for {title} and {source}")
@@ -585,8 +588,6 @@ class GeminiContentService:
             chat = self._get_or_create_chat_session(chat_id, article)
             
             # Send the current message and get streaming response
-            print(f"Sending message to persistent chat session: '{message}'")
-            print(f"History: {chat.get_history(True)}")
             response_stream = chat.send_message_stream(message)
             
             # Yield each chunk from the stream

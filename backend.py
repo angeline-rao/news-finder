@@ -153,7 +153,6 @@ def search_content_streaming():
 
                 # Send thinking content if available
                 if thinking_text:
-                    print(f"Found thinking content, sending: {thinking_text[:100]}...")
                     yield f"data: {json.dumps({'type': 'thought', 'content': thinking_text})}\n\n"
                 else:
                     print(f"No thinking content found in this chunk")
@@ -286,8 +285,6 @@ def get_recommendations_streaming():
                     # According to Gemini API docs, response has candidates[] with content.parts[]
                     if hasattr(chunk, 'candidates') and chunk.candidates:
                         candidate = chunk.candidates[0]  # Use first candidate
-                        if hasattr(candidate, 'grounding_metadata') and candidate.grounding_metadata:
-                            print(f"Grounding metadata: {candidate.grounding_metadata}")
                         if hasattr(candidate, 'content') and candidate.content:
                             if hasattr(candidate.content, 'parts') and candidate.content.parts:
                                 # Separate thinking and regular content parts
@@ -313,7 +310,7 @@ def get_recommendations_streaming():
                         print(f"Found thinking content, sending: {thinking_text[:100]}...")
                         yield f"data: {json.dumps({'type': 'thought', 'content': thinking_text})}\n\n"
                     else:
-                        print(f"🤔 No thinking content found in this chunk")
+                        print(f"No thinking content found in this chunk")
                     
                     # Process the content text
                     if content_text:
