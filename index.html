@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Intelligence • Content Discovery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@100;200;300;400;500;600;700;800;900&family=SF+Pro+Text:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23007AFF'/%3E%3C/svg%3E">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-center">
+                <span class="brand-text">Catch up on the latest in AI</span>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- Search Section -->
+    <section class="search-section-full">
+        <div class="search-container-full">
+            <div class="single-line-layout">
+                <button id="getRecommendationsBtn" class="action-btn primary">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 1L9.09 3.36L12 4L9.09 4.64L8 7L6.91 4.64L4 4L6.91 3.36L8 1Z" fill="currentColor"/>
+                        <path d="M13 9L13.9 10.8L16 11.5L13.9 12.2L13 14L12.1 12.2L10 11.5L12.1 10.8L13 9Z" fill="currentColor"/>
+                    </svg>
+                    <span>Brief me on AI</span>
+                </button>
+                <span class="or-text">or</span>
+                <div class="search-input-group compact">
+                    <div class="search-icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <circle cx="8.5" cy="8.5" r="6" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M13 13l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="e.g. Gemini, Thinking Machines"
+                        class="search-input"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button id="searchBtn" class="search-submit-btn" type="button">
+                        <span>Search</span>
+                    </button>
+                </div>
+                <div class="test-buttons" style="display: none;">
+                    <button id="testStreamBtn" class="action-btn tertiary">
+                        <span>Test Stream</span>
+                    </button>
+                    <button id="testRecommendationsStreamBtn" class="action-btn tertiary">
+                        <span>Test Rec Stream</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Empty State -->
+    <section class="empty-state-section">
+        <div class="empty-state" id="emptyState">
+            <div class="empty-state-content">
+                <div class="empty-state-icon">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                        <path d="M20 32L28 40L44 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3 class="empty-state-title">Ready to discover</h3>
+                <p class="empty-state-subtitle">
+                    Search for topics you're curious about, or let our AI recommend
+                    <br>personalized content based on your interests.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+    </main>
+
+    <!-- Full Width Results Section -->
+    <section class="full-width-results">
+        <!-- Loading State -->
+        <div class="loading-state" id="loading" style="display: none;">
+            <div class="loading-content">
+                <div class="loading-spinner">
+                    <div class="spinner-ring"></div>
+                </div>
+                <h3 class="loading-title">Finding relevant content</h3>
+                <p class="loading-subtitle">Our AI is analyzing your preferences...</p>
+            </div>
+        </div>
+
+        <!-- AI Thinking Display -->
+        <div class="thinking-card" id="thoughtSummary" style="display: none;">
+            <div class="thinking-header">
+                <div class="thinking-icon">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="37.7 12.57"/>
+                    </svg>
+                </div>
+                <h3 class="thinking-title">Doing Research...</h3>
+            </div>
+            <div class="thinking-content">
+                <p id="thoughtText" class="thinking-text"></p>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid" id="contentGrid">
+            <!-- Content items will be dynamically inserted here -->
+        </div>
+
+        <!-- Thought History Component -->
+        <div class="thought-history-card" id="thoughtHistory" style="display: none;">
+            <div class="thought-history-header">
+                <button class="thought-history-toggle" id="thoughtHistoryToggle" aria-expanded="false">
+                    <div class="toggle-icon">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <path d="M9 1C9 1 7.2 2.8 7.2 5.4C7.2 8 9 9.8 9 9.8C9 9.8 10.8 8 10.8 5.4C10.8 2.8 9 1 9 1Z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                            <circle cx="5.4" cy="13.5" r="1.8" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                            <circle cx="12.6" cy="13.5" r="1.8" stroke="currentColor" stroke-width="1.3" fill="none"/>
+                            <path d="M5.4 11.7C5.4 11.7 7.2 9.9 9 9.9C10.8 9.9 12.6 11.7 12.6 11.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <span class="toggle-title">AI Thought Process</span>
+                    <span class="thought-count">(<span id="thoughtHistoryCount">0</span> steps)</span>
+                    <div class="toggle-chevron">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                            <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </button>
+            </div>
+            <div class="thought-history-content" id="thoughtHistoryContent">
+                <div class="thought-history-list" id="thoughtHistoryList">
+                    <!-- Thought history items will be populated here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sidebar removed - no longer using memory/preferences functionality -->
+
+    <!-- API Key Setup Modal -->
+    <div class="modal-overlay" id="apiKeyModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Welcome to Gemini Intelligence</h2>
+                <p class="modal-subtitle">To get started, please enter your Gemini API key</p>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label for="apiKeyInput" class="input-label">API Key</label>
+                    <input 
+                        type="password" 
+                        id="apiKeyInput" 
+                        placeholder="Enter your Gemini API key"
+                        class="modal-input"
+                        autocomplete="off"
+                    >
+                </div>
+                <div class="security-note">
+                    <div class="security-icon">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 1L3 3V7C3 10.5 8 15 8 15C8 15 13 10.5 13 7V3L8 1Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <path d="M6 8L7 9L10 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span>Your API key is stored securely on your device and never shared</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveApiKeyBtn" class="modal-button primary">
+                    <span>Continue</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Interface Modal -->
+    <div class="modal-overlay" id="chatModal" style="display: none;">
+        <div class="chat-modal">
+            <div class="chat-modal-header">
+                <div class="chat-article-info">
+                    <h3 id="chatArticleTitle" class="chat-article-title">Article Title</h3>
+                    <p id="chatArticleSource" class="chat-article-source">Source</p>
+                    <div id="chatArticleUrl" class="chat-article-url" style="display: none;"></div>
+                </div>
+                <button class="chat-close-btn" id="chatCloseBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="chat-content">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message assistant-message">
+                        <div class="message-avatar">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="6" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            Hi! I'm here to help you dive deeper into this article. I have access to the article content and can answer questions about its background, implications, or how it relates to broader trends.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-suggestions">
+                    <button class="suggestion-btn" data-query="developments">
+                        <div class="suggestion-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <path d="M8 4V8L11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Find related developments from the past two years</span>
+                    </button>
+                    <button class="suggestion-btn" data-query="competitors">
+                        <div class="suggestion-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M1 13H15M3 9V13M7 5V13M11 1V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Compare with competitor data and create visualization</span>
+                    </button>
+                </div>
+                
+                <div class="chat-input-area">
+                    <div class="chat-input-group">
+                        <input 
+                            type="text" 
+                            id="chatInput" 
+                            placeholder="Ask me anything about this article..." 
+                            class="chat-input"
+                            autocomplete="off"
+                        >
+                        <button id="chatSendBtn" class="chat-send-btn">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                <path d="M2 9L16 2L11 9L16 16L2 9Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="chat-loading" id="chatLoading" style="display: none;">
+                        <div class="chat-typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <span>AI is thinking...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

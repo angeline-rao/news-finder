@@ -1,0 +1,37 @@
+{
+  "name": "gemini-content-discovery",
+  "version": "1.0.0",
+  "description": "AI-powered content discovery app using Gemini API with personalized recommendations",
+  "main": "app.js",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'No build process needed for this frontend-only app'",
+    "deploy": "echo 'Deploy the contents of this directory to your web server'"
+  },
+  "keywords": [
+    "gemini",
+    "ai",
+    "content-discovery",
+    "personalization",
+    "recommendation-engine",
+    "javascript",
+    "web-app"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/gemini-content-discovery.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/gemini-content-discovery/issues"
+  },
+  "homepage": "https://github.com/yourusername/gemini-content-discovery#readme"
+}
+
